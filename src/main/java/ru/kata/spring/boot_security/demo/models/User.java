@@ -3,49 +3,61 @@ package ru.kata.spring.boot_security.demo.models;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-     @Column(name = "name")
+    @Column(name = "name")
     @NotEmpty()
-    private String name;
+    private String name; //для входа
 
-  //  @Column(nullable = false, unique = true)
     @NotEmpty
-    @Email(message = "{errors.invalid_email}")
-     @Column(name = "email")
+    @Column(name = "username")
+    private String username;
 
-    private String email;
-    @Column(nullable = false)
+    @Column(name = "password")
     @NotEmpty
     @Size(min = 4)
     private String password;
 
-    public User() {//?
+    public String getRole() {
+        return role;
     }
 
-    public User(Integer id, String name, String email, String password) {//?
-        this.id = id;
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    @Column(name = "role")
+    private String role;
+
+    public User() {//Конструктор по умолчанию нужен для Spring
+    }
+
+    public User(String name, String username, String password, String role) {//?
         this.name = name;
-     this.email = email;
         this.password = password;
+        this.role = role;
     }
 
-    public int getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -57,16 +69,8 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setPassword(String password) {
@@ -74,7 +78,7 @@ public class User {
     }
 
     public List<Role> getRoles() {
-        return (List<Role>) roles;
+        return roles;
     }
 
     public void setRoles(List<Role> roles) {
@@ -82,13 +86,57 @@ public class User {
     }
 
 
+    //переопред. методы UserDetails
+    //возdращает коллекцию прав пользователя
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return  getRoles();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {//аккаунт не просрочен
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        //аккаунт не заблокирован
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {    //пароль рабочий
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {//аккаунт рабочий
+        return true;
+    }
+
+
     //связь с ролями
-    @ManyToMany(cascade = CascadeType.MERGE)
+    //Здесь жадная загрузка, чтобы сразу грузились все дочерние зависимости юзера. fetch (извлечение)
+    @ManyToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.MERGE)
     @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),
+            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),// колонка сущности User.
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
-    private List<Role> roles;
+    //колонка второй  сущности, с которой связан User т.е. Role.
+    private List<Role> roles = new ArrayList<>();
+
+    // private List<Role> roles;
+
 }
+
 
 
 
