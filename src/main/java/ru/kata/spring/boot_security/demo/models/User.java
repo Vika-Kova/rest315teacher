@@ -3,55 +3,59 @@ package ru.kata.spring.boot_security.demo.models;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 @Entity
-@Table(name = "users")
+@Table(name = "users")//"t_user"
 public class User implements UserDetails {
     @Id
-    @Column(name = "id")
+    @NotEmpty()
+    @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    @NotEmpty()
-    private String name; //для входа
-
-    @NotEmpty
     @Column(name = "username")
+    @NotEmpty()
+    @Size(min = 2, message = "Не меньше 5 знаков")
     private String username;
+
 
     @Column(name = "password")
     @NotEmpty
-    @Size(min = 4)
+    @Size(min = 2, message = "Не меньше 5 знаков")
     private String password;
 
-    public String getRole() {
-        return role;
-    }
+    @Column(name = "email")
+    @NotEmpty()
+    private String email;
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    @Column(name = "role")
-    private String role;
+    //Список ролей связан с пользователем отношением многие ко многим (один пользователь
+    //может иметь несколько ролей с одной стороны и у одной роли может быть несколько пользователей с другой)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roleList = new HashSet<>();
 
     public User() {//Конструктор по умолчанию нужен для Spring
     }
-
-    public User(String name, String username, String password, String role) {//?
-        this.name = name;
+    public User(String username, String password, String email) {
+        this.username = username;
         this.password = password;
-        this.role = role;
+        this.email = email;
     }
-
+    public User(Long id, String username, String password, String email,Set<Role> roleList) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.email=email;
+        this.roleList = roleList;
+    }
 
     public Long getId() {
         return id;
@@ -61,41 +65,30 @@ public class User implements UserDetails {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setUsername(String username) {
         this.username = username;
+    }
+ public Set<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(Set<Role> roleList) {
+        this.roleList = roleList;
+    }
+
+
+    @Override
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public List<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(List<Role> roles) {
-        this.roles = roles;
-    }
-
-
     //переопред. методы UserDetails
-    //возdращает коллекцию прав пользователя
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return  getRoles();
-    }
-
-    public String getPassword() {
-        return password;
-    }
+    // getAuthorities(), он возвращает список ролей пользователя.
+    //Поэтому для остальных методов измените возвращаемое значение на true.
 
     @Override
     public String getUsername() {
@@ -122,20 +115,39 @@ public class User implements UserDetails {
     public boolean isEnabled() {//аккаунт рабочий
         return true;
     }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
 
+        return getRoleList();
+    }
 
-    //связь с ролями
-    //Здесь жадная загрузка, чтобы сразу грузились все дочерние зависимости юзера. fetch (извлечение)
-    @ManyToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.MERGE)
-    @JoinTable(name = "user_roles",
-            joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),// колонка сущности User.
-            inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
-    //колонка второй  сущности, с которой связан User т.е. Role.
-    private List<Role> roles = new ArrayList<>();
-
-    // private List<Role> roles;
-
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", roleList=" + roleList +
+                '}';
+    }
+    public String roleToString(){
+        StringBuilder sb = new StringBuilder();
+        for(Role role: roleList){
+            sb.append(role.getName().toLowerCase());
+            //sb.append(role.getNameRole()).append(" ");
+        }
+        return sb.toString();
+    }
 }
+
+//связь с ролями
+//Здесь жадная загрузка, чтобы сразу грузились все дочерние зависимости юзера. fetch (извлечение)
+// @ManyToMany(fetch = FetchType.EAGER)//(cascade = CascadeType.MERGE)
+// @JoinTable(name = "user_roles",
+//     joinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID"),// колонка сущности User.
+//    inverseJoinColumns = @JoinColumn(name = "ROLE_ID", referencedColumnName = "ID"))
+
 
 
 

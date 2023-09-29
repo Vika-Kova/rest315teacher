@@ -1,6 +1,5 @@
 package ru.kata.spring.boot_security.demo.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -8,31 +7,24 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public WebSecurityConfig(SuccessUserHandler successUserHandler, UserService userService, PasswordEncoder passwordEncoder){
+    public WebSecurityConfig(SuccessUserHandler successUserHandler,
+                             UserService userService, PasswordEncoder passwordEncoder) {
         this.successUserHandler = successUserHandler;
         this.userService = userService;
-
         this.passwordEncoder = passwordEncoder;
-
     }
-
 
     //Настраиваем конфигурацию самого С Секьюрити
     @Override
@@ -41,51 +33,50 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()//?безопасность
                 .authorizeRequests()
                 .antMatchers("/", "/index").permitAll()//antMatchers указ url-адреса "/" и "/index" разрешены всем
-                // .antMatchers("/admin/**").hasRole("ADMIN")//В "/admin/**" могут заходить только юзеры с ролью "ADMIN"
-                // .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/admin/**").hasRole("ADMIN")//В "/admin/**" могут заходить только юзеры с ролью "ADMIN"
+                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()//Все остальные url-адреса доступны только аутентифицированным
                 .and()
                 .formLogin().successHandler(successUserHandler)
                 .permitAll()
-                .and()//разделитель
-                .logout().permitAll()//Разлогиниться могут все
-  .logoutUrl("/logout")
+                .and() // разделитель
+                //   .logout().permitAll()//Разлогиниться могут все
+                //.logoutUrl("/logout")
+                //.logoutSuccessUrl("/login");
+                .logout()
+                .logoutUrl("/logout")
                 .logoutSuccessUrl("/login");
     }
-
     // аутентификация inMemory
-    @Bean
-    @Override
-    public UserDetailsService userDetailsService() {
-        UserDetails user =
-                User.withDefaultPasswordEncoder()
-                        .username("user")
-                        .password("user")
-                        .roles("USER")
-                        .build();
+    // @Bean
+    //  @Override
+    // public UserDetailsService userDetailsService() {
+    //     UserDetails user =
+    //            User.withDefaultPasswordEncoder()
+    //                   .username("user")
+    //                    .password("user")
+    //                   .roles("USER")
+    //                   .build();
 
-        return new InMemoryUserDetailsManager(user);
-
-    }
-
-
-
-   //Преобразователь паролей в хэш.пароли в БД лежат в преобразованном виде.
+    //  return new InMemoryUserDetailsManager(user);
+    // }
+    //Преобразователь паролей в хэш.пароли в БД лежат в преобразованном виде.
 //Чтобы сравнить введенный с формы пароль с паролем в БД, нужно преобразовать в такой же вид пароль с формы.
+    //@Bean
+    // public PasswordEncoder passwordEncoder() {
+    //   return new BCryptPasswordEncoder();
+    //}
+    //  @Bean
+    //public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    //   return new BCryptPasswordEncoder();
+    //  }
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }//кодеровщик
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-    @Bean
-    protected DaoAuthenticationProvider daoAuthenticationProvider() {
-        DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        daoAuthenticationProvider.setUserDetailsService((UserDetailsService) userService);
-        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-        return daoAuthenticationProvider;
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userService);
+        // provider.setPasswordEncoder(passwordEncoder.bCryptPasswordEncoder());
+        provider.setPasswordEncoder(passwordEncoder);
+        return provider;
     }
 
 }
