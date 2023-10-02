@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.configs.controller;
+package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +13,6 @@ import java.security.Principal;
 @Controller
 @RequestMapping("/")
 public class UsersController {
-
     private UserService userService;
 
     @Autowired
@@ -32,4 +31,3 @@ public class UsersController {
         return "user";
     }
 }
-

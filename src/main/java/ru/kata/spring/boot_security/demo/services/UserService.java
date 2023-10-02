@@ -3,8 +3,10 @@ package ru.kata.spring.boot_security.demo.services;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 public interface UserService extends UserDetails, UserDetailsService {
@@ -15,7 +17,9 @@ public interface UserService extends UserDetails, UserDetailsService {
 
     List<User> indexUser();//list user
 
-    void updateUser(Long id, User user);
+    void updateUser( User user,Long id);
+
+
 
 
     void deleteUser(Long id);

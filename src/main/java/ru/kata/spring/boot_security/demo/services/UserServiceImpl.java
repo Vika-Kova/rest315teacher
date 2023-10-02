@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
+
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -58,13 +59,13 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    @Override
+  // @Override
     public void updateUser(Long id, User user) {
 
     }
 
 
-    // @Override
+     @Override
     @Transactional
     public void updateUser(User user, Long id) {
         User userFromDb = userRepository.findById(id).get();

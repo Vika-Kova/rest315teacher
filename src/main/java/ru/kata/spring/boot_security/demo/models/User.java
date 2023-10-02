@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Table(name = "users")//"t_user"
+
 public class User implements UserDetails {
     @Id
     @NotEmpty()

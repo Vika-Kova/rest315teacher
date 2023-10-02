@@ -40,6 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin().successHandler(successUserHandler)
                 .permitAll()
                 .and() // разделитель
+                  // .logout().permitAll()//Разлогиниться могут все
+               // .logoutUrl("/logout")
+               // .logoutSuccessUrl("/login");
+              //  .logout()
                 //   .logout().permitAll()//Разлогиниться могут все
                 //.logoutUrl("/logout")
                 //.logoutSuccessUrl("/login");

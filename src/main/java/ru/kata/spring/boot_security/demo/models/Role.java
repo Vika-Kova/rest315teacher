@@ -1,7 +1,9 @@
 package ru.kata.spring.boot_security.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.security.core.GrantedAuthority;
 
+import javax.annotation.PostConstruct;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -19,8 +21,8 @@ public class Role implements GrantedAuthority {
     @NotEmpty
     @Column(name = "role")
     private String name;
+     @ManyToMany(mappedBy = "roleList", cascade = CascadeType.ALL)
 
-    @ManyToMany(mappedBy = "roleList", cascade = CascadeType.ALL)
     private List<User> users;
 
     public Role() {
