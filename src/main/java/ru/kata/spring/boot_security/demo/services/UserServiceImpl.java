@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,13 +16,11 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-
-
-//UserService. Содержит методы для бизнес-логики приложения. Этот класс реализует интерфейс UserDetailsService
+//UserService. Содержит методы для бизнес-логики приложения. Этот класс реализует
+// интерфейс UserDetailsService
 //   (необходим для Spring Security), в котором нужно переопределить один метод loadUserByUsername().
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -34,7 +33,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -59,11 +57,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-  // @Override
-    public void updateUser(Long id, User user) {
-
-    }
-
 
      @Override
     @Transactional
@@ -78,16 +71,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
+  //  @Transactional
     public void deleteUser(Long id) {
         userRepository.findById(id);
     }
 
     @Override
-    @Transactional
+    //@Transactional
     public User findByUsername(String username) {
         return userRepository.findByUsername(username).get();
     }
+
+    private Collection<? extends GrantedAuthority> mapRolesToAuthorities (Collection<Role> roleList) {
+        return roleList.stream().map(r -> new SimpleGrantedAuthority(r.getName())).
+                collect(Collectors.toList());
+    }
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return getPassword();
+    }
+
+    @Override
+    public String getUsername() {
+        return getUsername();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -97,46 +130,6 @@ public class UserServiceImpl implements UserService {
         }
         User user = optionalUser.get();
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),
-                mapRolesToAuthorities(user.getRoleList()));
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities (Collection<Role> roleList) {
-        return roleList.stream().map(r -> new SimpleGrantedAuthority(r.getName())).
-                collect(Collectors.toList());
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return false;
+                mapRolesToAuthorities(user.getRoles()));
     }
 }

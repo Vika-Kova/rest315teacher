@@ -41,21 +41,19 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<Role> roleList = new HashSet<>();
+
+    //private Set<Role> roleList = new HashSet<>();
+    private Collection<Role> roles;
 
     public User() {//Конструктор по умолчанию нужен для Spring
     }
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
-    public User(Long id, String username, String password, String email,Set<Role> roleList) {
+
+    public User(Long id, String username, String password, String email, Collection<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.email=email;
-        this.roleList = roleList;
+        this.email = email;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -69,14 +67,15 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
- public Set<Role> getRoleList() {
-        return roleList;
+
+    public Collection<Role> getRoles() {
+        return roles;
     }
 
-    public void setRoleList(Set<Role> roleList) {
-        this.roleList = roleList;
-    }
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
 
+    }
 
     @Override
     public String getPassword() {
@@ -116,31 +115,25 @@ public class User implements UserDetails {
     public boolean isEnabled() {//аккаунт рабочий
         return true;
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        return getRoleList();
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", roleList=" + roleList +
-                '}';
-    }
-    public String roleToString(){
-        StringBuilder sb = new StringBuilder();
-        for(Role role: roleList){
-            sb.append(role.getName().toLowerCase());
-            //sb.append(role.getNameRole()).append(" ");
-        }
-        return sb.toString();
+        return roles;
     }
 }
+
+// public String roleToString(){
+//    StringBuilder sb = new StringBuilder();
+//   for(Role role: roleList){
+//       sb.append(role.getName().toLowerCase());
+//sb.append(role.getNameRole()).append(" ");
+//    }
+//    return sb.toString();
+//}
+
+// public void setRoles(List<Role> adminRoles) {
+// }
+//}
 
 //связь с ролями
 //Здесь жадная загрузка, чтобы сразу грузились все дочерние зависимости юзера. fetch (извлечение)

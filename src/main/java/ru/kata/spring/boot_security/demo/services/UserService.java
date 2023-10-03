@@ -21,7 +21,6 @@ public interface UserService extends UserDetails, UserDetailsService {
 
 
 
-
     void deleteUser(Long id);
 
 
@@ -29,5 +28,7 @@ public interface UserService extends UserDetails, UserDetailsService {
 
 
     UserDetails loadUserByUsername(String username) throws UsernameNotFoundException;
+
+
 }
 

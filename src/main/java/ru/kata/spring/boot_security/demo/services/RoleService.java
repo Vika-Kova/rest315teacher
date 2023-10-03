@@ -8,4 +8,8 @@ import java.util.List;
 @Component
 public interface RoleService {
     List<Role> getAllRoles();
+    void save(Role role);
+    Role showUserById(Long id);
+    //void deleteById(Long id);
+
 }
