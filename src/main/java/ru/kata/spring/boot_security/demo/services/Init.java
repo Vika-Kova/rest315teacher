@@ -23,8 +23,8 @@ public class Init {
 
     @PostConstruct
     public void initializedDataBase() {
-        roleService.save(new Role(1L, "ROLE_USER"));
-        roleService.save(new Role(2L, "ROLE_ADMIN"));
+        roleService.save(new Role("ROLE_ADMIN"));
+        roleService.save(new Role("ROLE_USER"));
         Set<Role> adminRole = new HashSet<>();
         Set<Role> userRole = new HashSet<>();
         Set<Role> allRoles = new HashSet<>();
@@ -32,10 +32,9 @@ public class Init {
         userRole.add(roleService.showUserById(2L));
         allRoles.add(roleService.showUserById(1L));
         allRoles.add(roleService.showUserById(2L));
-
-        userService.saveUser(new User(1L, "Daw", "$2a$12$XzDsds6YAXlFbiBLolx0o.XfVfzCoC.AasmG6F6ylaajdhlPMuw3y", "XXXW@X.com", adminRole));
-        userService.saveUser(new User(2L, "Pit", "$2a$12$NUA06mdsPJzIPC1M97aIv.V3Wxy.hHfBEVs8wQ6aJIvcK3VLUWpra", "userRole@.com", userRole));
-        userService.saveUser(new User(3L, "Kat", "$2a$12$C2ceoHhE6vGhY4IQn.N/JO78LCL8UL.DAODXJWEA49ySzj75VgEpq", "allRoles@d.com", allRoles));
+        userService.save(new User("Vasa", "Ivanov", "Vas@mail.ru", "Vasa", adminRole));
+        userService.save(new User("Max", "Hell", "MXxx@mail.ru", "Max", userRole));
+        userService.save(new User("Zina", "Kovalevskaya", "Zinaida@gmail.com", "Zina", allRoles));
     }
 }
 

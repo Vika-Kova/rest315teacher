@@ -7,9 +7,12 @@ import java.util.List;
 
 @Component
 public interface RoleService {
-    List<Role> getAllRoles();
+    List<Role> getAllUsers();
+
     void save(Role role);
+
     Role showUserById(Long id);
-    //void deleteById(Long id);
+
+    void deleteById(Long id);
 
 }

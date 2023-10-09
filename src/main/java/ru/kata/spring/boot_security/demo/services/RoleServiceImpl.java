@@ -5,10 +5,10 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
+
 @Service
-public class RoleServiceImpl  implements  RoleService {
+public class RoleServiceImpl implements RoleService {
     private final RoleRepository roleRepository;
 
     public RoleServiceImpl(RoleRepository roleRepository) {
@@ -16,11 +16,12 @@ public class RoleServiceImpl  implements  RoleService {
     }
 
     @Override
-    public List<Role> getAllRoles() {
+    public List<Role> getAllUsers() {
         return roleRepository.findAll();
     }
 
     @Override
+    @Transactional
     public void save(Role role) {
         roleRepository.save(role);
     }
@@ -28,10 +29,10 @@ public class RoleServiceImpl  implements  RoleService {
     @Override
     public Role showUserById(Long id) {
         return roleRepository.getOne(id);
+    }
 
-// @Override
-// public void deleteById(Long id) {
-//roleRepository.deleteById(id);
-// }
+    @Override
+    public void deleteById(Long id) {
+        roleRepository.deleteById(id);
     }
 }
