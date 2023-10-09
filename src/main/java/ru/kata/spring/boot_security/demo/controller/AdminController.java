@@ -26,7 +26,7 @@ public class AdminController {
         return "list";
     }
 
-    @GetMapping("/user-create")
+    @GetMapping("/user-create")//создать
     public String createUserForm(User user, Model model) {
         model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllUsers());
@@ -35,11 +35,11 @@ public class AdminController {
 
     @PostMapping("/user-create")
     public String createUser(User user) {
-        userService.save(user);
+        userService.save(user);//сохранить
         return "redirect:/admin";
     }
 
-    @GetMapping("/user-update/{id}")
+    @GetMapping("/user-update/{id}")//обновить
     public String updateUserFrom(@PathVariable("id") Long id, Model model) {
         model.addAttribute("user", userService.showUserById(id));
         model.addAttribute("roles", roleService.getAllUsers());

@@ -11,6 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Table(name = "users")
 
 public class User implements UserDetails {
+    // UserDetailsService интерфейс, в котором содержится loadUserByUsername(username строка)
+    // способ искать UserDetails для данного пользователя.
+    //UserDetails представляет собой объект пользователя, прошедшего проверку подлинности
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,18 +31,19 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_roles",
             joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
-
+    // private Collection<Role> roles;
+private Set<Role>roles;
     //Список ролей связан с пользователем отношением многие ко многим (один пользователь
     //может иметь несколько ролей с одной стороны и у одной роли может быть несколько пользователей с другой)
     public User() {
     }
 
-    public User(String firstName, String lastName, String username, String password, Collection<Role> roles) {
+    public User(String firstName, String lastName, String username, String password,Set <Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
@@ -82,14 +87,23 @@ public class User implements UserDetails {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public Collection<Role> getRoles() {
+    /////////
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+    /////////
+
+    //public Collection<Role> getRoles() {
+       // return roles;
+   // }
+
+  //  public void setRoles(Collection<Role> roles) {
+//this.roles = roles;
+   // }
 
     @Override
     public String getUsername() {
