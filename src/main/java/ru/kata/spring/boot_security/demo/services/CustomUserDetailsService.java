@@ -23,22 +23,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-    // @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //User user= userRepository.findByUsername(username)
-        //      .orElseThrow(() -> new UsernameNotFoundException("Email" + username + "not found"));
-        //return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
-        //return  user;
-        // User user = userRepository.findByUsername(username)
-        //       .orElseThrow(() -> new UsernameNotFoundException("Email" + username + "not found"));
-        //    new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
-        //   return user;
-        /////
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                new UsernameNotFoundException("Email" + username + "not found"));
-        new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
-        return user;
+        Optional<User> user_from_DB = Optional.ofNullable(userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь с таким именем не найден.")));
+        return user_from_DB.get();
     }
+
 }
+
+
+
+
 
 
