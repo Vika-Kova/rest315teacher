@@ -9,6 +9,8 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.Optional;
+
 @Service
 @Transactional
 public class CustomUserDetailsService implements UserDetailsService {
@@ -21,12 +23,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     }
 
     @Override
-   // @Transactional
+    // @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Email" + username + "not found"));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        //User user= userRepository.findByUsername(username)
+        //      .orElseThrow(() -> new UsernameNotFoundException("Email" + username + "not found"));
+        //return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        //return  user;
+        // User user = userRepository.findByUsername(username)
+        //       .orElseThrow(() -> new UsernameNotFoundException("Email" + username + "not found"));
+        //    new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        //   return user;
+        /////
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new UsernameNotFoundException("Email" + username + "not found"));
+        new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.getAuthorities());
+        return user;
+    }
+}
 
-    }
-    }
 
