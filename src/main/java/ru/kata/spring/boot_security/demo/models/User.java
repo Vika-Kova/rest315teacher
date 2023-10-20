@@ -6,15 +6,10 @@ import java.util.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-
 @Entity
 @Table(name = "users")
 
 public class User implements UserDetails {
-    // UserDetailsService интерфейс, в котором содержится loadUserByUsername(username строка)
-    // способ искать UserDetails для данного пользователя.
-    //UserDetails представляет собой объект пользователя, прошедшего проверку подлинности
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,29 +20,23 @@ public class User implements UserDetails {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "password")
     private String password;
 
+    @ManyToMany
+    private Set<Role> roles;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    // private Collection<Role> roles;
-private Set<Role>roles;
-    //Список ролей связан с пользователем отношением многие ко многим (один пользователь
-    //может иметь несколько ролей с одной стороны и у одной роли может быть несколько пользователей с другой)
     public User() {
     }
 
-    public User(String firstName, String lastName, String username, String password,Set <Role> roles) {
+    public User(String firstName, String lastName, String email, String password, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.username = username;
         this.password = password;
+        this.email = email;
         this.roles = roles;
     }
 
@@ -58,6 +47,14 @@ private Set<Role>roles;
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setId(Long id) {
@@ -84,10 +81,6 @@ private Set<Role>roles;
         this.lastName = lastName;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    /////////
     public Set<Role> getRoles() {
         return roles;
     }
@@ -95,23 +88,14 @@ private Set<Role>roles;
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
-    /////////
-
-    //public Collection<Role> getRoles() {
-       // return roles;
-   // }
-
-  //  public void setRoles(Collection<Role> roles) {
-//this.roles = roles;
-   // }
 
     @Override
     public String getUsername() {
-        return username;
+        return email;
     }
 
     @Override
-    public boolean isAccountNonExpired() {//аккаунт не просрочен
+    public boolean isAccountNonExpired() {
         return true;
     }
 
@@ -121,12 +105,12 @@ private Set<Role>roles;
     }
 
     @Override
-    public boolean isCredentialsNonExpired() {    //пароль рабочий
+    public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
-    public boolean isEnabled() {//аккаунт рабочий
+    public boolean isEnabled() {
         return true;
     }
 
@@ -134,7 +118,6 @@ private Set<Role>roles;
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
-
 }
 
 

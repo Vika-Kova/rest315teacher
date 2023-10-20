@@ -32,6 +32,7 @@ public class Init {
         userRole.add(roleService.showUserById(2L));
         allRoles.add(roleService.showUserById(1L));
         allRoles.add(roleService.showUserById(2L));
+
         userService.save(new User("Vasa", "Ivanov", "Vas@mail.ru", "Vasa", adminRole));
         userService.save(new User("Max", "Hell", "MXxx@mail.ru", "Max", userRole));
         userService.save(new User("Zina", "Kovalevskaya", "Zinaida@gmail.com", "Zina", allRoles));

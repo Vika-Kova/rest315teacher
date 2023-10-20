@@ -1,13 +1,9 @@
 package ru.kata.spring.boot_security.demo.services;
 
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import ru.kata.spring.boot_security.demo.models.User;
-
 import java.util.List;
-import java.util.Optional;
 
-public interface UserService {//extends UserDetailsService {
+public interface UserService {
     List<User> getAllUsers();
 
     void save(User user);
@@ -18,8 +14,12 @@ public interface UserService {//extends UserDetailsService {
 
     void update(Long id, User user);
 
-    Optional<User> findByEmail(String email);
-
-    //UserDetails loadUserByUsername(String username);
+    User findByEmail(String email);
 }
+
+
+
+
+
+
 
