@@ -28,13 +28,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void save(User user) {
+    public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteUserById(Long id) {
         userRepository.deleteById(id);
     }
 
@@ -45,14 +45,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void update(Long id, User user) {
+    public void updateUser(Long id, User user) {
         user.setId(id);
         userRepository.save(user);
     }
 
     @Override
 
-    public User findByEmail(String email) {
+    public Optional<User> findByUserEmail(String email) {
         return userRepository.findByEmail(email);
    }
 }

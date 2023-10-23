@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-
-    <title>User page</title>
+    <title></title>
 </head>
 <body>
 
@@ -16,12 +15,12 @@
         <div class="col-11 text-white">
             <span class="h5">
                 <th:block
-                        th:text="${user.getEmail()}">
+                        th:text="${user.get().email}">
                 </th:block>
             </span>
             <span class="font-weight-light">
                 <th:block
-                        th:text="'with roles: '+ ${user.getRoles()}">
+                        th:text="'with roles: '+ ${user.get().roles}">
                 </th:block>
             </span>
         </div>
@@ -32,6 +31,7 @@
 </div>
 
 <br>
+
 
 <div class="d-flex align-items-start">
     <div class="col-2 m-0 p-0">
@@ -48,29 +48,33 @@
                 <br>
                 <div class="card">
                     <div class="card-header">
-                        <span class="h5">About user</span>
+                        <span class="h3">About user</span>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
                             <tr>
+
                                 <th scope="col">ID</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
-                                <th scope="col">Age</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
+
+
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
+
                                 <td th:text="${user.getId}"></td>
                                 <td th:text="${user.getFirstName()}"></td>
                                 <td th:text="${user.getLastName()}"></td>
-                                <td th:text="${user.getAge()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td th:text="${user.getRoles()}"></td>
+
                             </tr>
+
                             </tbody>
                         </table>
                     </div>

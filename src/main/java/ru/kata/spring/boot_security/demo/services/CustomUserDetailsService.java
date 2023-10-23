@@ -14,7 +14,6 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CustomUserDetailsService implements UserDetailsService {
-
     private final UserRepository userRepository;
 
     @Autowired
@@ -24,13 +23,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            throw new UsernameNotFoundException(String.format("User '%s' not found", email));
-       }
-       return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), user.getAuthorities());
-   }
+        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User '%s' not found, email")));
+        return user.get();
+    }
 }
+
+
+
 
 
 

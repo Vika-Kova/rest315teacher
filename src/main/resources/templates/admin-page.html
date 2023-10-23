@@ -15,12 +15,12 @@
         <div class="col-11 text-white">
             <span class="h5">
                 <th:block
-                        th:text="${user.getEmail()}">
+                        th:text="${user.get().email}">
                 </th:block>
             </span>
             <span class="font-weight-light">
                 <th:block
-                        th:text="'with roles: '+ ${user.getRoles()}">
+                        th:text="'with roles: '+ ${user.get().roles}">
                 </th:block>
             </span>
         </div>
@@ -30,6 +30,7 @@
     </div>
 </div> <!--Шапка с Email, Ролями и кнопкой Logout -->
 <br>
+
 <div class="d-flex align-items-start">
     <div class="col-2 m-0 p-0"> <!-- NAV BAR вкладки слева ADMIN и USER  -->
         <div class="nav flex-column nav-pills me-3" id="Left-menu" role="tablist" aria-orientation="vertical">
@@ -69,7 +70,6 @@
                                         <th scope="col">ID</th>
                                         <th scope="col">First Name</th>
                                         <th scope="col">Last Name</th>
-
                                         <th scope="col">Email</th>
                                         <th scope="col">Role</th>
                                         <th scope="col">Edit</th>
@@ -77,15 +77,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
+
                                     <tr th:each="user : ${users}">
                                         <td th:text="${user.getId}"></td>
                                         <td th:text="${user.getFirstName()}"></td>
                                         <td th:text="${user.getLastName()}"></td>
-
                                         <td th:text="${user.getEmail()}"></td>
                                         <td th:text="${user.getRoles()}"></td>
-                                        <td> <!-- Кнопка Edit. Открывает модальное окно modalEdit{id}  -->
 
+                                    <td> <!-- Кнопка Edit. Открывает модальное окно modalEdit{id}  -->
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                                     th:data-bs-target="${'#modalEdit'+user.getId()}">Edit
                                             </button>
@@ -336,12 +336,12 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td th:text="${user.getId}"></td>
-                                <td th:text="${user.getFirstName()}"></td>
-                                <td th:text="${user.getLastName()}"></td>
+                                <td th:text="${user.get()}"></td>
+                                <td th:text="${user.get()}"></td>
+                                <td th:text="${user.get()}"></td>
 
-                                <td th:text="${user.getEmail()}"></td>
-                                <td th:text="${user.getRoles()}"></td>
+                                <td th:text="${user.get()}"></td>
+                                <td th:text="${user.get()}"></td>
                             </tr>
                             </tbody>
                         </table>
