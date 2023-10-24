@@ -79,13 +79,13 @@
                                     <tbody>
 
                                     <tr th:each="user : ${users}">
+                                    <tr th:each="user : ${users}">
                                         <td th:text="${user.getId()}"></td>
                                         <td th:text="${user.getFirstName()}"></td>
                                         <td th:text="${user.getLastName()}"></td>
                                         <td th:text="${user.getEmail()}"></td>
                                         <td th:text="${user.getRoles()}"></td>
-
-                                    <td> <!-- Кнопка Edit. Открывает модальное окно modalEdit{id}  -->
+                                        <td> <!-- Кнопка Edit. Открывает модальное окно modalEdit{id}  -->
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                                     th:data-bs-target="${'#modalEdit'+user.getId()}">Edit
                                             </button>
@@ -329,20 +329,19 @@
                                 <th scope="col">ID</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
-
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td th:text="${user.get()}"></td>
-                                <td th:text="${user.get()}"></td>
-                                <td th:text="${user.get()}"></td>
-
-                                <td th:text="${user.get()}"></td>
-                                <td th:text="${user.get()}"></td>
+                                <td th:text="${user.get().id}"></td>
+                                <td th:text="${user.get().firstName}"></td>
+                                <td th:text="${user.get().lastName}"></td>
+                                <td th:text="${user.get().email}"></td>
+                                <td th:text="${user.get().roles}"></td>
                             </tr>
+
                             </tbody>
                         </table>
                     </div>

@@ -24,7 +24,7 @@ public class AdminController {
 
     @GetMapping(value = "")
     public String showAdminPanel(Model model, Principal principal) {
-        model.addAttribute("user", userService.findByEmail(principal.getName()));//5
+        model.addAttribute("user", userService.findByEmail(principal.getName()));
         model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("roleList", roleService.getAllUsers());
         model.addAttribute("newUser", new User());
@@ -39,7 +39,6 @@ public class AdminController {
 
     @PatchMapping("/edit/{id}")
     public String updateUser(@PathVariable("id") Long id, @ModelAttribute("user") User user, @RequestParam("roles")Long[] rolesId ){
-
         userService.updateUser(id, user);
         return "redirect:/admin";
     }
