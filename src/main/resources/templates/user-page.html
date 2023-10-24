@@ -15,12 +15,13 @@
         <div class="col-11 text-white">
             <span class="h5">
                 <th:block
-                        th:text="${user.get().email}">
+                        th:text="${user.getEmail()}">
                 </th:block>
             </span>
             <span class="font-weight-light">
                 <th:block
-                        th:text="'with roles: '+ ${user.get().roles}">
+                        th:text="'with roles: '+ ${user.getRoles() }">
+
                 </th:block>
             </span>
         </div>
@@ -31,8 +32,7 @@
 </div>
 
 <br>
-
-
+...
 <div class="d-flex align-items-start">
     <div class="col-2 m-0 p-0">
         <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
@@ -48,54 +48,57 @@
                 <br>
                 <div class="card">
                     <div class="card-header">
-                        <span class="h3">About user</span>
+                        <span class="h5">About user</span>
                     </div>
                     <div class="card-body">
                         <table class="table table-striped">
                             <thead>
                             <tr>
-
                                 <th scope="col">ID</th>
                                 <th scope="col">First Name</th>
                                 <th scope="col">Last Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
 
-
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
+                                <!--        <td th:text="${user.get().id}"></td>-->
+                                <!--       <td th:text="${user.get().firstName}"></td>-->
+                                 <!--      <td th:text="${user.get().lastName}"></td>-->
+                                <!--       <td th:text="${user.get().email}"></td>-->
+                                <!--       <td th:text="${user.get().roles}"></td>-->
 
-                                <td th:text="${user.getId}"></td>
+                                <td th:text="${user.getId()}"></td>
                                 <td th:text="${user.getFirstName()}"></td>
                                 <td th:text="${user.getLastName()}"></td>
                                 <td th:text="${user.getEmail()}"></td>
                                 <td th:text="${user.getRoles()}"></td>
 
-                            </tr>
+                                  </tr>
 
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                  </tbody>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
-        integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
-        crossorigin="anonymous"></script>
+      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+              integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+              crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+              crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+              integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+              crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js"
+              integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa"
+              crossorigin="anonymous"></script>
 
-</body>
-</html>
+      </body>
+      </html>

@@ -79,7 +79,7 @@
                                     <tbody>
 
                                     <tr th:each="user : ${users}">
-                                        <td th:text="${user.getId}"></td>
+                                        <td th:text="${user.getId()}"></td>
                                         <td th:text="${user.getFirstName()}"></td>
                                         <td th:text="${user.getLastName()}"></td>
                                         <td th:text="${user.getEmail()}"></td>

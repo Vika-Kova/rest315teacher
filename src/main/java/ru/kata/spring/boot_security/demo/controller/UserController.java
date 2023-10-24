@@ -24,7 +24,11 @@ public class UserController {
 
     @GetMapping(value = "")
     public String showUserPage(Model model, Principal principal) {
-        model.addAttribute("user", userService.findByUserEmail(principal.getName()));
+        model.addAttribute("user", userService.findByEmail(principal.getName()));//1
+       // Optional<User> user = userService.findByUserEmail(principal.getName());
+       // model.addAttribute("user", user);
+     //   model.addAttribute("userRoles", user.getClass());
+        
         return "user-page";
     }
 }

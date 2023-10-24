@@ -1,6 +1,7 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,7 +10,9 @@ import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -23,11 +26,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User '%s' not found, email")));
-        return user.get();
-    }
+          Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email)///?2
+             .orElseThrow(() -> new UsernameNotFoundException("User '%s' not found, email")));
+         return user.get();
+         }
+      //Optional<User> user = Optional.ofNullable(userRepository.findByEmail(email)
+         //       .orElseThrow(() -> new UsernameNotFoundException("User '" + email + "' not found")));
+      //  return user.get();
+   // }
 }
+
+
+
+
+
 
 
 
