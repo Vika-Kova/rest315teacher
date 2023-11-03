@@ -39,8 +39,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User showUserById(Long id) {
-        return userRepository.getOne(id);
+    public Optional<User> showUserById(Long id) {
+       // return userRepository.getOne(id);
+        //По сути, getOne - это операция отложенной загрузки. Таким образом, вы получаете
+        // только ссылку (прокси) на объект. Это означает, что доступ к БД фактически
+        // не осуществляется. Только когда вы вызываете
+        // его свойства, он запрашивает базу данных. findById выполняет вызов "охотно" /
+        // немедленно при вашем вызове, таким образом, фактическая сущность полностью заполнена
+        ///////
+         return  userRepository.findById(id);
     }
 
     @Override
