@@ -1,41 +1,52 @@
 package ru.kata.spring.boot_security.demo.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import ru.kata.spring.boot_security.demo.models.Role;
 import ru.kata.spring.boot_security.demo.models.User;
+import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.repositories.RoleRepository;
+import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.annotation.PostConstruct;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 public class Init {
 
-    private final UserService userService;
-    private final RoleService roleService;
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public Init(UserService userService, RoleService roleService) {
-        this.userService = userService;
-        this.roleService = roleService;
+    public Init(UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
-
     @PostConstruct
-    public void initializedDataBase() {
-        roleService.save(new Role("ROLE_ADMIN"));
-        roleService.save(new Role("ROLE_USER"));
-        Set<Role> adminRole = new HashSet<>();
-        Set<Role> userRole = new HashSet<>();
-        Set<Role> allRoles = new HashSet<>();
-        adminRole.add(roleService.showUserById(1L));
-        userRole.add(roleService.showUserById(2L));
-        allRoles.add(roleService.showUserById(1L));
-        allRoles.add(roleService.showUserById(2L));
+    @Transactional
+    public void InitInit() {
+        Role roleAdmin = new Role("ROLE_ADMIN");
+        Role roleUser = new Role("ROLE_USER");
+        roleRepository.save(roleAdmin);
+        roleRepository.save(roleUser);
 
-        userService.saveUser(new User("Vasa", "Ivanov", "Vas@mail.ru", "Vasa", adminRole));
-        userService.saveUser(new User("Max", "Hell", "MXxx@mail.ru", "Max", userRole));
-        userService.saveUser(new User("Zina", "Kovalevskaya", "Zinaida@gmail.com", "Zina", allRoles));
+        User user = new User();
+        user.setFirstName("Zina");
+        user.setLastName("Kovalevskaya");
+        user.setEmail("Zinaj@jmail.com");
+        user.setPassword(passwordEncoder.encode("adminZinaJava"));
+        user.getRoles().add(roleRepository.findRoleByRole("ROLE_ADMIN"));
+        userRepository.save(user);
+
+        user = new User();
+        user.setFirstName("Max");
+        user.setLastName("Ivanov");
+        user.setEmail("Zinaj@jmail.com");
+        user.setPassword(passwordEncoder.encode("userMax"));
+        user.getRoles().add(roleRepository.findRoleByRole("ROLE_USER"));
+        userRepository.save(user);
     }
 }
 

@@ -9,19 +9,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 @Configuration
 @EnableWebSecurity
+@EnableWebMvc
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private final SuccessUserHandler successUserHandler;
-
+//private  final  PasswordEncoder passwordEncoder;
     private final UserDetailsService userDetailsService;
 
     @Autowired
     public WebSecurityConfig(SuccessUserHandler successUserHandler,
-                             UserDetailsService userDetailsService) {
+                             PasswordEncoder passwordEncoder, UserDetailsService userDetailsService) {
         this.successUserHandler = successUserHandler;
+        //this.passwordEncoder = passwordEncoder;
 
         this.userDetailsService = userDetailsService;
     }
@@ -31,24 +33,45 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()//?безопасность
                 .authorizeRequests()
-                .antMatchers("/", "/index").permitAll()//antMatchers указ url-адреса "/" и "/index" разрешены всем
-                .antMatchers("/admin/**").hasRole("ADMIN")//В "/admin/**" могут заходить только юзеры с ролью "ADMIN"
-                .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")//все
-                .and().formLogin().successHandler(successUserHandler).permitAll()
+                //.antMatchers("/", "/index").permitAll()//antMatchers указ url-адреса "/" и "/index" разрешены всем
+               // .antMatchers("/admin/**").hasRole("ADMIN")//В "/admin/**" могут заходить только юзеры с ролью "ADMIN"
+              //  .antMatchers("/user/**").hasAnyRole("ADMIN", "USER")//все
+              //  .and().formLogin().successHandler(successUserHandler).permitAll()
+               // .and()
+                //.logout().logoutSuccessUrl("/login");
+                . antMatchers("/login", "/error").permitAll()
+                .antMatchers("/admin/**", "/adminApi/**").hasRole("ADMIN")
+                .antMatchers("/userApi/**", "/user/**", "/userApi/**").hasAnyRole("USER", "ADMIN")
+                .anyRequest().authenticated()
                 .and()
-                .logout().logoutSuccessUrl("/login");
+                .formLogin()
+                .loginPage("/login")
+                .loginProcessingUrl("/process_login")
+                .successHandler(successUserHandler)
+                .failureUrl("/login?error")
+                .and()
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login");
+
     }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
+
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder());
-        provider.setUserDetailsService(  userDetailsService);
-        return provider;
+    //взвр. юзера в SecurityContext
+    public DaoAuthenticationProvider authenticationProvider() {//?
+       DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+    provider.setPasswordEncoder(passwordEncoder());
+     provider.setUserDetailsService(  userDetailsService);
+    return provider;
     }
+
+    //protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+     //  auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+   //}
+
 }
