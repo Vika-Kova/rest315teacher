@@ -1,3 +1,5 @@
+
+
 getCurrentUser()
 
 function getCurrentUser() {

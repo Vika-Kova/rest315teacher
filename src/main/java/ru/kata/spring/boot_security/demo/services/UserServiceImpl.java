@@ -4,13 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.models.User;
 import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
-import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
+
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -20,10 +21,14 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
+    @Override
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
 
     @Override
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public User findOne(Long id) {
+        return userRepository.findById(id).orElse(null);
     }
 
     @Override
@@ -34,34 +39,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUserById(Long id) {
-        userRepository.deleteById(id);
-    }
-
-    @Override
-    public Optional<User> showUserById(Long id) {
-       // return userRepository.getOne(id);
-        //По сути, getOne - это операция отложенной загрузки. Таким образом, вы получаете
-        // только ссылку (прокси) на объект. Это означает, что доступ к БД фактически
-        // не осуществляется. Только когда вы вызываете
-        // его свойства, он запрашивает базу данных. findById выполняет вызов "охотно" /
-        // немедленно при вашем вызове, таким образом, фактическая сущность полностью заполнена
-        ///////
-         return  userRepository.findById(id);
+    @Transactional
+    public void updateUser(Long id, User updatedUser) {
+        updatedUser.setId(id);
+        updatedUser.setPassword(passwordEncoder.encode(updatedUser.getPassword()));
+        userRepository.save(updatedUser);
     }
 
     @Override
     @Transactional
-    public void updateUser(Long id, User user) {
-        user.setId(id);
-        userRepository.save(user);
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 
-    @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByUserName(email);//findByEmail(email);
-    }
 }
+
+
 
 
 

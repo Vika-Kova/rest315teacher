@@ -7,6 +7,7 @@ import java.util.List;
 
 @Component
 public interface RoleService {
+
     List<Role> getAllUsers();
 
     void save(Role role);
@@ -16,6 +17,12 @@ public interface RoleService {
     void deleteById(Long id);
 
 }
+
+
+
+
+
+
 
 
 
