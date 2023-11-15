@@ -25,6 +25,7 @@ function editUser() {
                 id: formEdit.id.value,
                 firstName: formEdit.firstName.value,
                 lastName: formEdit.lastName.value,
+                age: formEdit.age.value,
                 email: formEdit.email.value,
                 password: formEdit.password.value,
                 roles: roles

@@ -31,7 +31,7 @@ public class Init {
     public void InitInit() {
        Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
-        roleRepository.save(roleAdmin);//roleRepository.save(roleAdmin);
+        roleRepository.save(roleAdmin);
      roleRepository.save(roleUser);
 
         User user = new User();
