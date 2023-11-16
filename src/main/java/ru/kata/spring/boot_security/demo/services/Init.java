@@ -38,7 +38,7 @@ public class Init {
         user.setFirstName("Zina");
         user.setLastName("Kovalevskaya");
         user.setEmail("Zinaj@jmail.com");
-        user.setPassword(passwordEncoder.encode("adminZina"));
+        user.setPassword(passwordEncoder.encode("adminZ"));
         user.getRoles().add(roleRepository.findRoleByRole("ROLE_ADMIN"));
         userRepository.save(user);
 

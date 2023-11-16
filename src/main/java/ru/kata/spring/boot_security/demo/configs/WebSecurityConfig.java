@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll() // Разрешаем доступ к главной странице всем
                 .antMatchers("/admin/**", "/adminApi/**").hasRole("ADMIN")
                 .antMatchers("/user/**", "/userApi/**", "/adminApi/**").hasAnyRole("USER", "ADMIN")
+                //.anyRequest().permitAll()
                 .and()
                 .formLogin()
                 .loginProcessingUrl("/login")
