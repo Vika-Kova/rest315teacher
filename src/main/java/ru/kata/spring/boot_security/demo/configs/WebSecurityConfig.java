@@ -25,17 +25,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        // http.cors().and().
-//http
-        // .csrf().disable().//безопасность
-        //  .authorizeRequests()
-        // .antMatchers("/", "/index").permitAll()//antMatchers указ url-адреса "/" и "/index" разрешены всем
-        // .antMatchers("/admin/**").hasRole("ADMIN")//В "/admin/**" могут заходить только юзеры с ролью "ADMIN"
-        //.antMatchers("/user/**").hasAnyRole("ADMIN", "USER")//все
-        //.and().formLogin().successHandler(successUserHandler).permitAll()
-        // .and()
-        // .logout().logoutSuccessUrl("/login");
-///////
         http.authorizeRequests()
                 .antMatchers("/").permitAll() // Разрешаем доступ к главной странице всем
                 .antMatchers("/admin/**", "/adminApi/**").hasRole("ADMIN")
@@ -52,28 +41,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .cors().and().csrf().disable();
     }
-    ///////
-        /*http.authorizeRequests()
-                .antMatchers("/", "/static/**", "/js/**", "/css/**").permitAll()
-                .antMatchers("/").permitAll()
-                //.antMatchers("/user").hasAnyRole("USER", "ADMIN")
-               // .antMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().permitAll()
-               // .anyRequest().authenticated()
-                .and()
-                .formLogin().successHandler(successUserHandler)
-                .loginProcessingUrl("/login")
-                .usernameParameter("name")
-                .passwordParameter("password")
-                .permitAll()
-                .and()
-                .logout()
-                .permitAll().and().httpBasic()
-                //.equals(new AntPathRequestMatcher("/logout"))
-                //.logoutSuccessUrl("/login")
-                .and().cors().and().csrf()
-                .disable();
-  *///
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
