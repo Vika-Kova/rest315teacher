@@ -1,6 +1,4 @@
-
 const tbody = $('#AllUsers')
-
 getTableUser()
 
 function getTableUser() {
@@ -11,7 +9,6 @@ function getTableUser() {
             js.forEach(item => {
                 const users = `$(
                     <tr>
-                    
                         <td class="pt-3" id="userID">${item.id}</td>
                         <td class="pt-3" >${item.firstName}</td>
                         <td class="pt-3" >${item.lastName}</td>

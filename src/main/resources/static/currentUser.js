@@ -1,5 +1,3 @@
-
-
 getCurrentUser()
 
 function getCurrentUser() {
@@ -13,7 +11,6 @@ function getCurrentUser() {
                         <td>${js.id}</td>
                         <td>${js.firstName}</td>
                         <td>${js.lastName}</td>
-                   
                         <td>${js.email}</td>
                         <td>${js.shortRole}</td>
                     </tr>)`;

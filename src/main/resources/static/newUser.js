@@ -1,5 +1,3 @@
-
-
 let form = document.forms["create"];
 createNewUser()
 

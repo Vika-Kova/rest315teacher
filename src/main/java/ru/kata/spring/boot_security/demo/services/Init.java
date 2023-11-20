@@ -11,8 +11,6 @@ import ru.kata.spring.boot_security.demo.repositories.UserRepository;
 
 import javax.annotation.PostConstruct;
 
-
-
 @Component
 public class Init {
 
@@ -26,13 +24,14 @@ public class Init {
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
+
     @PostConstruct
     @Transactional
     public void InitInit() {
-       Role roleAdmin = new Role("ROLE_ADMIN");
+        Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
         roleRepository.save(roleAdmin);
-     roleRepository.save(roleUser);
+        roleRepository.save(roleUser);
 
         User user = new User();
         user.setFirstName("Zina");
@@ -50,6 +49,5 @@ public class Init {
         user.getRoles().add(roleRepository.findRoleByRole("ROLE_USER"));
         userRepository.save(user);
     }
-
 }
 
